@@ -14,7 +14,7 @@ namespace BattleBoardGame.Model.Factory
 
         public abstract Guerreiro CriarGuerreiro();
 
-        public enum Nacao { India=1, Persia=2, Egito=3};
+        public enum Nacao { India=1, Persia=2, Egito=3, Romano=4};
 
         /// <summary>
         /// Este método é uma factory para a Abstract Factory.
@@ -28,15 +28,19 @@ namespace BattleBoardGame.Model.Factory
             AbstractFactoryExercito factory = null;
             if (nacionalidade == Nacao.Persia)
             {
-                factory = null;
+                factory = new Factory.FactoryExercitoPersa();
             }
             else if (Nacao.Egito == nacionalidade)
             {
-                factory = new Factory.FactoryExercitoPersa();
+                factory = new Factory.FactoryExercitoEgipcio();
             }
             else if (Nacao.India == nacionalidade)
             {
                 factory = new Factory.FactoryExercitoIndiano();
+            }
+            else if(Nacao.Romano == nacionalidade)
+            {
+                factory = new Factory.FactoryExercitoRomano();
             }
             return factory;
         }
