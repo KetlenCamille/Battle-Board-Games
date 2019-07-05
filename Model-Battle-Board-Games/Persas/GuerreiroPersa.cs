@@ -10,7 +10,7 @@ namespace BattleBoardGame.Model
     {
         public GuerreiroPersa() : base()
         {
-            Imagem = "https://imgur.com/PVqzH0W";
+            Imagem = "https://i.pinimg.com/originals/67/85/36/6785360aee154b463800a8fab091494c.jpg";
         }
     }
 }

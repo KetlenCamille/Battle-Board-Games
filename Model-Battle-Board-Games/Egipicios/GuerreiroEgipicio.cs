@@ -10,7 +10,7 @@ namespace BattleBoardGame.Model
     {
         public GuerreiroEgipicio() : base()
         {
-            Imagem = "https://imgur.com/uqwIRf2";
+            Imagem = "https://ae01.alicdn.com/kf/HTB1GASZJpXXXXbPXXXXq6xXFXXX1/Adult-Egyptian-Pharaoh-Halloween-Costume-Tut-Cosplay-Fantasia-Fancy-Dress-for-Men.jpg_640x640.jpg";
         }
     }
 }

@@ -8,7 +8,7 @@ namespace BattleBoardGame.Model
     {
         public CavaleiroRomano() : base()
         {
-            Imagem = "https://imgur.com/4wARJVu";
+            Imagem = "https://st2.depositphotos.com/1634428/8854/v/950/depositphotos_88549254-stock-illustration-roman-war-chariot.jpg";
         } 
     }
 }

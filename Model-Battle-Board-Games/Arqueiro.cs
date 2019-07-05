@@ -15,6 +15,6 @@ namespace BattleBoardGame.Model
         public override int AlcanceMovimento { get; protected set; } = 1;
         public override int AlcanceAtaque { get; protected set; } = 3;
         public override int Ataque { get; protected set; } = 10;
-        public string Imagem { get; protected set; }
+        public override string Imagem { get; protected set; }
     }
 }

@@ -8,8 +8,7 @@ namespace BattleBoardGame.Model
     {
         public GuerreiroRomano() : base()
         {
-            Imagem = "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiFofnnwZzjAhW2H7kGHfFaCRkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.pinterest.com.mx%2Fpin%2F324470348146392013%2F&psig=AOvVaw1bsrRCsA6gO0CnxSv7JTl1&ust=1562372643279836";
-
+            Imagem = "https://st2.depositphotos.com/1042659/12049/i/950/depositphotos_120491022-stock-photo-3d-rendering-ancient-greek-soldier.jpg";
         }
     }
 

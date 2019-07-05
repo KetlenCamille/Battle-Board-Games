@@ -10,7 +10,7 @@ namespace BattleBoardGame.Model
     {
         public ArqueiroEgipicio() : base()
         {
-            Imagem = "https://imgur.com/OfkWbzK";
+            Imagem = "https://2.bp.blogspot.com/-trRhhUVAfDE/WZW3pgPoQ2I/AAAAAAAAAPQ/sgCwSWPPl7MF2nEyo8RvUfRYfeJWqjszQCLcBGAs/s1600/f79af5c61d5cd0e18911db741900b136.jpg";
         }
     }
 }

@@ -10,7 +10,7 @@ namespace BattleBoardGame.Model
     {
         public CavaleiroPersa() : base()
         {
-            Imagem = "https://imgur.com/xgehDTE";
+            Imagem = "http://3.bp.blogspot.com/_lrnheGDims4/TCD9U3eZZ1I/AAAAAAAAFcU/aC1qM5-2Lrs/s1600/catafracto+parto.gif";
         }
     }
 }

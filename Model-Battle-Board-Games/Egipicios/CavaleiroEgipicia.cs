@@ -10,7 +10,7 @@ namespace BattleBoardGame.Model
     {
         public CavaleiroEgipicia() : base()
         {
-            Imagem = "https://imgur.com/qye79Ru";
+            Imagem = "http://nextews.com/images/d9/e2/d9e255bc7de00ec5.jpg";
         }
     }
 }

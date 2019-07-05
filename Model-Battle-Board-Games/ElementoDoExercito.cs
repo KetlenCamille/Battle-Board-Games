@@ -59,6 +59,9 @@ namespace BattleBoardGame.Model
         [DataMember]
         public int TabuleiroId { get; set; }
 
+        [DataMember]
+        public abstract string Imagem { get; protected set; }
+
         /// <summary>
         /// A anotação ForeignKey específica que o membro "TabuleiroId" desta classe
         /// armazena a chave estrangeira que faz referência a entidade Tabuleiro.
