@@ -30,10 +30,19 @@ $.ajax({
     )
     .fail();
 function criarJogo() {
+
+    var rad = document.selectExercito.exercito;
+
+    for (var i = 0; i < rad.length; i++) {
+        if (rad[i].checked) {
+            var idNacao = rad[i].value;
+        }
+    }
+
     $.ajax({
         type: 'GET',
         url: baseURL +
-            "/api/BatalhasAPI/CriarBatalha"
+            "/api/BatalhasAPI/CriarBatalha/" + idNacao 
     })
         .done(
             function (data) {

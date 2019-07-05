@@ -4,6 +4,7 @@
         + window.location.port : '');
 
 function iniciarBatalha(idBatalha) {
+
     $.ajax({
         type: 'GET',
         url: baseURL +

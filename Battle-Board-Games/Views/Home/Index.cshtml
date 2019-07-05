@@ -12,6 +12,20 @@
 {
     <h5>Seja Bem Vindo! - @UserManager.GetUserName(User) </h5>
     <p>Quantidade de Batalhas do Jogador</p><p id="qtdBatalhasJogador"></p>
+
+    <br>
+    <p>
+        Escolha uma nação:
+    </p>
+    <form name="selectExercito">
+        <div>
+            <input id="exercito" type="radio" name="exercito" value="3" />Egito   |
+            <input id="exercito" type="radio" name="exercito" value="1" />Indiano |
+            <input id="exercito" type="radio" name="exercito" value="2" />Persa  |
+            <input id="exercito" type="radio" name="exercito" value="4" />Romano
+        </div>
+    </form>
+    <br>
     <button class="btn btn-primary" onclick="criarJogo()">
         Criar Jogo
     </button>

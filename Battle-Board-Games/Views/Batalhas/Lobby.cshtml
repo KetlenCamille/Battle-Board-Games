@@ -19,38 +19,53 @@
                 {
                     @Model.ExercitoBranco.Usuario.Username
                 }
-            </p>
-        </div>
-        <div class="col-md-4">
-            <p style="text-align:center">VS</p>
-        </div>
-        <div class="col-md-4">
-            <p style="text-align:center">
-                @if (Model.ExercitoPreto != null)
+
+                @if (@Model.ExercitoBranco != null)
                 {
-                    @if (!@String.IsNullOrEmpty(Model.ExercitoPreto.Usuario.PrimeiroNome))
+                    <p>@Model.ExercitoBranco.Nacao</p>
+                }
+
+                </p>
+
+            </div>
+            <div class="col-md-4">
+                <p style="text-align:center">VS</p>
+            </div>
+            <div class="col-md-4">
+                <p style="text-align:center">
+                    @if (Model.ExercitoPreto != null)
                     {
-                        @Model.ExercitoPreto.Usuario.PrimeiroNome
+                        @if (!@String.IsNullOrEmpty(Model.ExercitoPreto.Usuario.PrimeiroNome))
+                        {
+                            @Model.ExercitoPreto.Usuario.PrimeiroNome
+                        }
+                        else
+                        {
+                            @Model.ExercitoPreto.Usuario.Username
+                        }
                     }
                     else
                     {
-                        @Model.ExercitoPreto.Usuario.Username
-                    }
+                    <p>Esperando o próximo jogador...</p>
                 }
-                else
-                {
-                <p>Esperando o próximo jogador...</p>
-            }
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <button id="singlebutton" name="singlebutton" class="btn btn-primary"
-                        onclick="iniciarBatalha('@Model.Id')">Iniciar Jogo</button>
-            </div>
-        </div>
+                    </p>
 
-        @section Scripts{
-            <script src="~/js/IniciarBatalha.js"></script>
-        }
+                    @if (@Model.ExercitoPreto != null)
+                    {
+                        <p>@Model.ExercitoPreto.Nacao</p>
+                    }
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <button id="singlebutton" name="singlebutton" class="btn btn-primary"
+                            onclick="iniciarBatalha('@Model.Id')">
+                        Iniciar Jogo
+                    </button>
+                </div>
+            </div>
+
+            @section Scripts{
+                <script src="~/js/IniciarBatalha.js"></script>
+            }
