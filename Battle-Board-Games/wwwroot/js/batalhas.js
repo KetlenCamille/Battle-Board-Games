@@ -8,11 +8,11 @@ $.ajax({
         "/api/BatalhasAPI/QtdBatalhas"
 })
     .done(
-    function (data) {
-        document
-            .getElementById("qtdBatalhas")
-            .innerHTML = data;
-    }
+        function (data) {
+            document
+                .getElementById("qtdBatalhas")
+                .innerHTML = data;
+        }
     )
     .fail()
 
