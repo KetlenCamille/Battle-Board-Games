@@ -14,7 +14,14 @@
                 <div class="card-body">
                     <strong><p style="font-size: 20px;" class="card-text">Nome do Jogador</p></strong>
                     <p class="card-text">
-                        @Model.ExercitoBranco.Usuario.Username
+                        @if (!@String.IsNullOrEmpty(Model.ExercitoBranco.Usuario.PrimeiroNome))
+                        {
+                            @Model.ExercitoBranco.Usuario.PrimeiroNome
+                        }
+                        else
+                        {
+                            @Model.ExercitoBranco.Usuario.Username
+                        }
                     </p>
                     <strong><p style="font-size: 20px;" class="card-text">Exército</p></strong>
                     <p class="card-text">@Model.ExercitoBranco.Nacao</p>
@@ -31,7 +38,17 @@
                 <div class="card-body">
                     <strong><p style="font-size: 20px;" class="card-text">Nome do Jogador</p></strong>
                     <p class="card-text">
-                        @Model.ExercitoPreto.Usuario.Username
+                        @if (Model.ExercitoPreto != null)
+                        {
+                            @if (!@String.IsNullOrEmpty(Model.ExercitoPreto.Usuario.PrimeiroNome))
+                            {
+                                @Model.ExercitoPreto.Usuario.PrimeiroNome
+                            }
+                            else
+                            {
+                                @Model.ExercitoPreto.Usuario.Username
+                            }
+                        }
                     </p>
                     <strong><p style="font-size: 20px;" class="card-text">Exército</p></strong>
                     <p class="card-text">@Model.ExercitoPreto.Nacao</p>
