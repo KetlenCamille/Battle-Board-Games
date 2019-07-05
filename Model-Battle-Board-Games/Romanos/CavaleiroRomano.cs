@@ -6,6 +6,9 @@ namespace BattleBoardGame.Model
 {
     class CavaleiroRomano : Cavaleiro
     {
-
+        public CavaleiroRomano() : base()
+        {
+            Imagem = "https://imgur.com/4wARJVu";
+        } 
     }
 }
