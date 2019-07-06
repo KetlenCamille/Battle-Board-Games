@@ -322,7 +322,11 @@ namespace Battle_Board_Games.Controllers
             }
             else
             {
-                batalha.ExercitoPreto = e;
+                if (batalha.ExercitoPreto.Nacao != batalha.ExercitoBranco.Nacao)
+                {
+                    batalha.ExercitoPreto = e;
+                }
+                
             }
             _context.SaveChanges();
             return Ok(batalha);

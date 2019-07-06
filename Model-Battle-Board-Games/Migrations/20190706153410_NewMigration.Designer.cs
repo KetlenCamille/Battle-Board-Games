@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ModelBattleBoardGames.Migrations
 {
     [DbContext(typeof(ModelJogosDeGuerra))]
-    [Migration("20190705020333_NewMigration")]
+    [Migration("20190706153410_NewMigration")]
     partial class NewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -32,25 +32,33 @@ $.ajax({
 function criarJogo() {
 
     var rad = document.selectExercito.exercito;
+    var isCheked = false;
 
     for (var i = 0; i < rad.length; i++) {
         if (rad[i].checked) {
             var idNacao = rad[i].value;
+            isCheked = true;
+            break;
         }
     }
 
-    $.ajax({
-        type: 'GET',
-        url: baseURL +
-            "/api/BatalhasAPI/CriarBatalha/" + idNacao 
-    })
-        .done(
-            function (data) {
-                window.location.href = "/Batalhas/Lobby/" + data.id;
-            }
-        )
-        .fail(
-            function () {
-                alert("Erro ao Criar a Batalha.")
-            });
+    if (!isCheked) {
+        alert("Escolha uma nação antes de iniciar um novo jogo!");
+    }
+    else {
+        $.ajax({
+            type: 'GET',
+            url: baseURL +
+                "/api/BatalhasAPI/CriarBatalha/" + idNacao
+        })
+            .done(
+                function (data) {
+                    window.location.href = "/Batalhas/Lobby/" + data.id;
+                }
+            )
+            .fail(
+                function () {
+                    alert("Erro ao Criar a Batalha.")
+                });
+    }
 }

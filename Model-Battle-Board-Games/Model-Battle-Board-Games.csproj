@@ -18,5 +18,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Class1.cs" />
+    <Compile Remove="Migrations\20190705020333_NewMigration.cs" />
   </ItemGroup>
 </Project>
