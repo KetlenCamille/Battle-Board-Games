@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ModelBattleBoardGames.Migrations
 {
     [DbContext(typeof(ModelJogosDeGuerra))]
-    [Migration("20190606024933_Nomes")]
-    partial class Nomes
+    [Migration("20190708000753_create")]
+    partial class create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -86,6 +86,8 @@ namespace ModelBattleBoardGames.Migrations
                     b.Property<int>("ExercitoId");
 
                     b.Property<int?>("ExercitoId1");
+
+                    b.Property<string>("Imagem");
 
                     b.Property<int>("Saude");
 

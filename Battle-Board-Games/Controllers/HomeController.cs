@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BattleBoardGame.Models;
 using Microsoft.AspNetCore.Authorization;
+using BattleBoardGame.Model;
+using BattleBoardGames.DAL;
 
 namespace BattleBoardGame.Controllers
 {
     public class HomeController : Controller
     {
 
+        HomeDAO HomeDAO;
+
+        //Construtor
+        public HomeController(Model.DAL.ModelJogosDeGuerra context)
+        {
+            HomeDAO = new HomeDAO(context);
+        }
 
         public IActionResult About()
         {
@@ -33,14 +42,9 @@ namespace BattleBoardGame.Controllers
         {
             return View();
         }
-       
 
-        private readonly Model.DAL.ModelJogosDeGuerra _context;
+      
 
-        public HomeController(Model.DAL.ModelJogosDeGuerra context)
-        {
-            this._context = context;
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -66,14 +70,10 @@ namespace BattleBoardGame.Controllers
             return View();
         }
 
-
-
-
         public ActionResult Tabuleiro(int BatalhaId = -1)
         {
             ViewBag.Title = "Tabuleiro";
-            var batalha = _context.Batalhas
-                   .Where(b => b.Id == BatalhaId).FirstOrDefault();
+            Batalha batalha = HomeDAO.retornarBatalha(BatalhaId);
             if (batalha != null)
                 return View(batalha);
             return View();
