@@ -10,7 +10,7 @@ namespace BattleBoardGame.Model
     {
         public CavaleiroIndiana() : base()
         {
-            Imagem = "https://imgur.com/qrFZw0P";
+            Imagem = "https://janineshroff.files.wordpress.com/2011/11/indian-knight-cut-out-web.jpg";
         }
     }
 }
