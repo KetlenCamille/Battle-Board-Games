@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using BattleBoardGame.Model;
 using BattleBoardGame.Model.DAL;
+using BattleBoardGames.DAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,29 +18,18 @@ namespace Battle_Board_Games.Controllers
     [Route("[controller]")]
     public class BatalhasController : Controller
     {
-
-        private readonly ModelJogosDeGuerra _context;
+        BatalhasDAO BatalhasDAO;
         public BatalhasController(ModelJogosDeGuerra context)
         {
-            this._context = context;
+            BatalhasDAO = new BatalhasDAO(context);
         }
 
         [Route("Lobby/{batalhaId}")]
         [HttpGet()]
         public ActionResult Lobby(int batalhaId)
         {
-            var batalha = _context.Batalhas
-                .Where(x => x.Id.Equals(batalhaId))
-                .Include(b => b.ExercitoBranco)
-                .Include(b => b.ExercitoBranco.Usuario)
-                .Include(b => b.ExercitoPreto)
-                .Include(b => b.ExercitoPreto.Usuario)
-                .Include(b => b.Tabuleiro)
-                .Include(b => b.Turno)
-                .Include(b => b.Turno.Usuario)
-                .Include(b => b.Vencedor)
-                .Include(b => b.Vencedor.Usuario)
-                .FirstOrDefault();
+            Batalha batalha = BatalhasDAO.buscarBatalhaPorID(batalhaId);
+
             ViewBag.Id = batalha.Id;
             return View(batalha);
         }
@@ -48,18 +38,7 @@ namespace Battle_Board_Games.Controllers
         [HttpGet]
         public ActionResult Tabuleiro(int batalhaId)
         {
-            var batalha = _context.Batalhas
-                .Where(x => x.Id.Equals(batalhaId))
-                .Include(b => b.ExercitoBranco)
-                .Include(b => b.ExercitoBranco.Usuario)
-                .Include(b => b.ExercitoPreto)
-                .Include(b => b.ExercitoPreto.Usuario)
-                .Include(b => b.Tabuleiro)
-                .Include(b => b.Turno)
-                .Include(b => b.Turno.Usuario)
-                .Include(b => b.Vencedor)
-                .Include(b => b.Vencedor.Usuario)
-                .FirstOrDefault();
+            Batalha batalha = BatalhasDAO.buscarBatalhaPorID(batalhaId);
             ViewBag.Id = batalha.Id;
             return View(batalha);
         }

@@ -1,6 +1,7 @@
 ﻿using BattleBoardGame.Model;
 using BattleBoardGame.Model.DAL;
 using BattleBoardGames.Areas.Identity.Data;
+using BattleBoardGames.DAL;
 using BattleBoardGames.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,25 +19,20 @@ namespace Battle_Board_Games.Controllers
     [ApiController]
     public class BatalhasAPIController : ControllerBase
     {
-        private readonly ModelJogosDeGuerra _context;
-
-
-        UserManager<BattleBoardGamesUser> _userManager;
-
+        BatalhasAPIDAO BatalhasAPIDAO;
         UsuarioService _usuarioService;
-        public BatalhasAPIController
-            (ModelJogosDeGuerra context, UserManager<BattleBoardGamesUser> userManager)
+
+        public BatalhasAPIController(ModelJogosDeGuerra context, UserManager<BattleBoardGamesUser> userManager)
         {
-            _context = context;
-            _userManager = userManager;
-            _usuarioService = new UsuarioService(_context, _userManager);
+            BatalhasAPIDAO = new BatalhasAPIDAO(context, userManager);
+            _usuarioService = new UsuarioService(context, userManager);
         }
 
         [HttpGet]
         [Route("QtdBatalhas")]
         public async Task<IActionResult> ObterQuantidadeBatalhas()
         {
-            return Ok(await _context.Batalhas.CountAsync());
+            return Ok(await BatalhasAPIDAO.retornarQuantidadeBatalhas());
         }
 
         // GET: api/BatalhasAPI
@@ -47,11 +43,11 @@ namespace Battle_Board_Games.Controllers
             IEnumerable<Batalha> batalhas;
             if (Finalizada)
             {
-                batalhas = _context.Batalhas.Where(b => b.Vencedor != null).ToList();
+                batalhas = BatalhasAPIDAO.retornarBatalhasFinalizadas();
             }
             else
             {
-                batalhas = _context.Batalhas.ToList();
+                batalhas = BatalhasAPIDAO.retornarTodasBatalhas();
             }
             return batalhas;
         }
@@ -61,17 +57,8 @@ namespace Battle_Board_Games.Controllers
         [Route("QtdBatalhasJogador")]
         public async Task<IActionResult> GetBatalhasJogador()
         {
-            var batalhas = _context.Batalhas
-                .Where(b => (b.ExercitoBranco != null &&
-                            b.ExercitoBranco.UsuarioId ==
-                            User.Identity.Name)
-                            ||
-                            (b.ExercitoPreto != null &&
-                            b.ExercitoPreto.UsuarioId ==
-                            User.Identity.Name))
-                            .Count();
+            int batalhas = BatalhasAPIDAO.retornarBatalhasJogador(User.Identity.Name);
             return Ok(batalhas);
-
         }
 
 
@@ -79,9 +66,12 @@ namespace Battle_Board_Games.Controllers
         [Authorize]
         public async Task<IActionResult> EscolherNacao(Nacao nacao, int ExercitoId)
         {
-            var exercito = _context.Exercitos.Where(e => e.Id == ExercitoId).FirstOrDefault();
+
+            Exercito exercito = BatalhasAPIDAO.buscarExercitoPorID(ExercitoId);
             exercito.Nacao = nacao;
-            await _context.SaveChangesAsync();
+
+            await BatalhasAPIDAO.AlterarDadosAsync();
+
             return Ok(exercito);
         }
 
@@ -95,14 +85,7 @@ namespace Battle_Board_Games.Controllers
                 return BadRequest(ModelState);
             }
 
-            var batalha = await _context.Batalhas.Include(b => b.ExercitoPreto)
-                .Include(b => b.ExercitoPreto.Usuario)
-                .Include(b => b.ExercitoBranco)
-                .Include(b => b.ExercitoBranco.Usuario)
-                .Include(b => b.Tabuleiro)
-                .Include(b => b.Tabuleiro.ElementosDoExercito)
-                .Include(b => b.Turno)
-                .Include(b => b.Turno.Usuario).Where(b => b.Id == id).FirstOrDefaultAsync();
+            Batalha batalha = await BatalhasAPIDAO.buscarBatalhaPorID(id);
 
             if (batalha == null)
             {
@@ -116,23 +99,12 @@ namespace Battle_Board_Games.Controllers
         [Authorize]
         public async Task<IActionResult> IniciarBatalha(int id)
         {
-
-
-            var usuario = _usuarioService.ObterUsuarioEmail(this.User);
+            Usuario usuario = _usuarioService.ObterUsuarioEmail(this.User);
 
 
             //Get batalha
-            var batalha = _context.Batalhas
-                .Include(b => b.ExercitoPreto)
-                .Include(b => b.ExercitoBranco)
-                .Include(b => b.Tabuleiro)
-                .Include(b => b.Turno)
-                .Include(b => b.Turno.Usuario)
-                .Where(b =>
-                (b.ExercitoBranco.Usuario.Id == usuario.Id
-                || b.ExercitoPreto.Usuario.Id == usuario.Id)
-                && (b.ExercitoBranco != null && b.ExercitoPreto != null)
-                && b.Id == id).FirstOrDefault();
+            Batalha batalha = BatalhasAPIDAO.retornarBatalhaPorUsuario(usuario, id);
+
             if (batalha == null)
             {
                 return NotFound();
@@ -160,7 +132,9 @@ namespace Battle_Board_Games.Controllers
             {
                 BadRequest("Não foi escolhido uma nação.");
             }
-            _context.SaveChanges();
+
+            BatalhasAPIDAO.AlterarDados();
+
             return Ok(batalha);
         }
 
@@ -169,27 +143,14 @@ namespace Battle_Board_Games.Controllers
         [HttpPost]
         public async Task<IActionResult> Jogar([FromBody]Movimento movimento)
         {
-            movimento.Elemento =
-                _context.ElementosDoExercitos
-                .Include(el => el.Exercito)
-                    .FirstOrDefault(el => el.Id == movimento.ElementoId);
+            movimento.Elemento = BatalhasAPIDAO.buscarElementoPorId(movimento.ElementoId);
+
             if (movimento.Elemento == null)
             {
                 return NotFound();
             }
 
-            movimento.Batalha =
-                _context.Batalhas
-                .Include(b => b.Tabuleiro)
-                .Include(b => b.Tabuleiro.ElementosDoExercito)
-                .Include(b => b.ExercitoBranco)
-                .Include(b => b.ExercitoPreto)
-                .Include(b => b.Turno)
-                .Include(b => b.Vencedor)
-                .Include(b => b.ExercitoBranco.Usuario)
-                .Include(b => b.ExercitoPreto.Usuario)
-                .FirstOrDefault(
-                    m => m.Id == movimento.BatalhaId);
+            movimento.Batalha = BatalhasAPIDAO.retornarBatalhaPorId(movimento.BatalhaId);
 
             var usuario = this._usuarioService.ObterUsuarioEmail(this.User);
 
@@ -214,7 +175,7 @@ namespace Battle_Board_Games.Controllers
                 batalha.Turno = null;
                 batalha.TurnoId = batalha.TurnoId == batalha.ExercitoBrancoId ?
                     batalha.ExercitoPretoId : batalha.ExercitoBrancoId;
-                await _context.SaveChangesAsync();
+                await BatalhasAPIDAO.AlterarDadosAsync();
                 return Ok(batalha);
             }
             return BadRequest("Operação não realizada");
@@ -235,15 +196,16 @@ namespace Battle_Board_Games.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(batalha).State = EntityState.Modified;
+            BatalhasAPIDAO.AlterarBatalha(batalha);
+
 
             try
             {
-                await _context.SaveChangesAsync();
+                await BatalhasAPIDAO.AlterarDadosAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BatalhaExists(id))
+                if (BatalhasAPIDAO.buscarBatalha(id) == null)
                 {
                     return NotFound();
                 }
@@ -265,8 +227,8 @@ namespace Battle_Board_Games.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Batalhas.Add(batalha);
-            await _context.SaveChangesAsync();
+            BatalhasAPIDAO.AdicionarBatalha(batalha);
+            await BatalhasAPIDAO.AlterarDadosAsync();
 
             return CreatedAtAction("GetBatalha", new { id = batalha.Id }, batalha);
         }
@@ -276,22 +238,14 @@ namespace Battle_Board_Games.Controllers
         [Authorize]
         public async Task<IActionResult> CriarBatalha(int idNacao)
         {
-            var usuario = _usuarioService.ObterUsuarioEmail(this.User);
+            Usuario usuario = _usuarioService.ObterUsuarioEmail(this.User);
 
-            var batalha = _context.Batalhas.Include(b => b.ExercitoBranco)
-                .Include(b => b.ExercitoPreto)
-                .FirstOrDefault(b =>
-            (b.ExercitoBrancoId == null
-            || b.ExercitoPretoId == null) &&
-            (b.ExercitoBranco.UsuarioId != usuario.Id
-            && b.ExercitoPreto.UsuarioId != usuario.Id));
-
-
+            Batalha batalha = BatalhasAPIDAO.buscarBatalhaPendente(usuario);
 
             if (batalha == null)
             {
                 batalha = new Batalha();
-                _context.Add(batalha);
+                BatalhasAPIDAO.AdicionarBatalha(batalha);
             }
 
             Exercito e = new Exercito();
@@ -320,15 +274,11 @@ namespace Battle_Board_Games.Controllers
             {
                 batalha.ExercitoBranco = e;
             }
-            else
+            else if (batalha.ExercitoPretoId == null)
             {
-                if (batalha.ExercitoPreto.Nacao != batalha.ExercitoBranco.Nacao)
-                {
-                    batalha.ExercitoPreto = e;
-                }
-                
+                batalha.ExercitoPreto = e;
             }
-            _context.SaveChanges();
+            BatalhasAPIDAO.AlterarDados();
             return Ok(batalha);
         }
 
@@ -343,21 +293,19 @@ namespace Battle_Board_Games.Controllers
                 return BadRequest(ModelState);
             }
 
-            var batalha = await _context.Batalhas.FindAsync(id);
+            Batalha batalha = await BatalhasAPIDAO.buscarBatalha(id);
+
             if (batalha == null)
             {
                 return NotFound();
             }
 
-            _context.Batalhas.Remove(batalha);
-            await _context.SaveChangesAsync();
+            BatalhasAPIDAO.removerBatalha(batalha);
+
+            await BatalhasAPIDAO.AlterarDadosAsync();
 
             return Ok(batalha);
         }
 
-        private bool BatalhaExists(int id)
-        {
-            return _context.Batalhas.Any(e => e.Id == id);
-        }
     }
 }
