@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ModelBattleBoardGames.Migrations
 {
     [DbContext(typeof(ModelJogosDeGuerra))]
-    [Migration("20190706153410_NewMigration")]
-    partial class NewMigration
+    [Migration("20190708000753_create")]
+    partial class create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
