@@ -274,13 +274,9 @@ namespace Battle_Board_Games.Controllers
             {
                 batalha.ExercitoBranco = e;
             }
-            else
+            else if (batalha.ExercitoPretoId == null)
             {
-                if (batalha.ExercitoPreto.Nacao != batalha.ExercitoBranco.Nacao)
-                {
-                    batalha.ExercitoPreto = e;
-                }
-                
+                batalha.ExercitoPreto = e;
             }
             BatalhasAPIDAO.AlterarDados();
             return Ok(batalha);
